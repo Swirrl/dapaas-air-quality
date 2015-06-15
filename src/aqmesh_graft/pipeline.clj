@@ -87,6 +87,10 @@
   "Pipeline to convert the tabular AQMesh sensor data sheet into graph data."
   convert-aqmesh-sensor-data aqmesh-sensor-template)
 
+(defgraft aqmesh-sensor->graph
+  "Pipeline to convert the tabular AQMesh sensor sheet into graph data."
+  convert-aqmesh-sensor sensor-template)
+
 (defn aqmesh-sensor-data-pipeline
   "Pipeline to convert the tabular AQMesh sensor data sheet into graph data."
   [data-file output]
