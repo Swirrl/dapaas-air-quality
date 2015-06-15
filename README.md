@@ -1,2 +1,3 @@
-# dapaas-air-quality
-Grafter pipeline for air quality sensors for DaPaaS project
+# AQMesh Graft
+
+A Grafter transformation to transform AQMesh sensor data to RDF
