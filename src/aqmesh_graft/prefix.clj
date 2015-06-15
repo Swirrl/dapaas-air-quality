@@ -25,8 +25,12 @@
 (def ppb (base-vocab "unit/partPerBillion"))
 (def percentage (base-vocab "unit/percentage"))
 
+(def AQMeshSensor (base-vocab "AQMeshSensor"))
 (def sensor (base-vocab "sensor"))
 
 (def belowLOD (base-vocab "belowLimitOfDetection"))
 
 (def parameter-def (prefixer (base-vocab "air-quality/")))
+
+(def geo:long "http://www.w3.org/2003/01/geo/wgs84_pos#long")
+(def geo:lat "http://www.w3.org/2003/01/geo/wgs84_pos#lat")

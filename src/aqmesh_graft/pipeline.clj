@@ -31,6 +31,15 @@
                     [sdmx-attribute:unitMeasure unit]
                     [sdmx-attribute:obsStatus below-lod]])))
 
+(def sensor-template
+  (graph-fn [{:keys [sensor-uri sensor-no longtitude latitude]}]
+            (graph (base-graph "sensor")
+                   [sensor-uri
+                    [rdf:a AQMeshSensor]
+                    [rdfs:label (s (str "Sensor " sensor-no))]
+                    [geo:long (s longtitude)]
+                    [geo:lat (s latitude)]])))
+
 (defpipe convert-aqmesh-sensor-data
   "Pipeline to convert tabular AQMesh sensor data into a different tabular format."
   [data-file]
@@ -59,6 +68,21 @@
         (derive-column :label [:variable] measure-label)
         (derive-column :param-uri [:label] (comp parameter-def remove-blanks)))))
 
+(defpipe convert-aqmesh-sensor
+  "Pipeline to convert tabular AQMesh sensor data into a different tabular format."
+  [data-file]
+  (let [sensor (parse-sensor data-file)]
+    (-> (read-dataset data-file)
+        (take-rows 2)
+; There seems to be a last blank column ~> problem 'move-first-row-to-header
+        (columns ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
+                  "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "aa" "ab" "ac" "ad" "ae"])
+        (make-dataset move-first-row-to-header)
+        (rename-columns (comp keyword slugify))
+        (columns [:longtitude :latitude])
+        (add-column :sensor-no sensor)
+        (derive-column :sensor-uri [:sensor-no] sensor-id))))
+
 (defgraft aqmesh-sensor-data->graph
   "Pipeline to convert the tabular AQMesh sensor data sheet into graph data."
   convert-aqmesh-sensor-data aqmesh-sensor-template)
@@ -68,5 +92,13 @@
   [data-file output]
   (-> (convert-aqmesh-sensor-data data-file)
       aqmesh-sensor-template
+      (import-rdf output))
+  (println "Grafted: " data-file))
+
+(defn aqmesh-sensor-pipeline
+  "Pipeline to convert the tabular AQMesh sensor sheet into graph data."
+  [data-file output]
+  (-> (convert-aqmesh-sensor data-file)
+      sensor-template
       (import-rdf output))
   (println "Grafted: " data-file))
