@@ -19,6 +19,10 @@
             [aqmesh-graft.transform :refer :all]
             [aqmesh-graft.util :refer [import-rdf]]))
 
+;;
+;; Templates
+;;
+
 (def aqmesh-sensor-template
   (graph-fn [{:keys [obs-uri ds value datetime unit sensor-uri below-lod param-uri label sensor-no date time]}]
             (graph (base-graph "air-quality")
@@ -65,8 +69,12 @@
                     [dcterms:references pmd-doc]
                     [skos:hasTopConcept param-uri]])))
 
+;;
+;; Pipes
+;;
+
 (defpipe convert-aqmesh-sensor-data
-  "Pipeline to convert tabular AQMesh sensor data into a different tabular format."
+  "Pipeline to convert tabular AQMesh sensor measure data"
   [data-file]
   (let [sensor (parse-sensor data-file)]
     (-> (read-dataset data-file)
@@ -94,7 +102,7 @@
         (derive-column :param-uri [:label] (comp parameter-def remove-blanks)))))
 
 (defpipe convert-aqmesh-sensor
-  "Pipeline to convert tabular AQMesh sensor data into a different tabular format."
+  "Pipeline to convert tabular AQMesh sensor data"
   [data-file]
   (let [sensor (parse-sensor data-file)]
     (-> (read-dataset data-file)
@@ -106,35 +114,42 @@
         (derive-column :sensor-uri [:sensor-no] sensor-id))))
 
 (defpipe convert-sensor-parameter-concept-scheme
-  "Pipeline to convert tabular AQMesh sensor concept scheme"
+  "Pipeline to convert tabular AQMesh sensor measure concept scheme"
   [data-file]
-  (let [sensor (parse-sensor data-file)]
-    (-> (read-dataset data-file)
-        (take-rows 2)
-        (columns ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
-                  "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "aa" "ab" "ac" "ad" "ae"])
-        (make-dataset move-first-row-to-header)
-        (rename-columns (comp keyword slugify))
-        (columns [:date :time :no-final :no2-final :co-final :o3-final :8-temp-celcius :9-rh-% :10-ap-mbar])
-        (melt [:date :time])
-        (columns [:variable])
-        (derive-column :label [:variable] measure-label)
-        (derive-column :param-uri [:label] (comp parameter-def remove-blanks)))))
+  (-> (read-dataset data-file)
+      (take-rows 2)
+      (columns ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
+                "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "aa" "ab" "ac" "ad" "ae"])
+      (make-dataset move-first-row-to-header)
+      (rename-columns (comp keyword slugify))
+      (columns [:date :time :no-final :no2-final :co-final :o3-final :8-temp-celcius :9-rh-% :10-ap-mbar])
+      (melt [:date :time])
+      (columns [:variable])
+      (derive-column :label [:variable] measure-label)
+      (derive-column :param-uri [:label] (comp parameter-def remove-blanks))))
+
+;;
+;; Grafts
+;;
 
 (defgraft aqmesh-sensor-data->graph
-  "Pipeline to convert the tabular AQMesh sensor data sheet into graph data."
+  "Pipeline to convert the tabular AQMesh sensor measure data sheet into graph data."
   convert-aqmesh-sensor-data aqmesh-sensor-template)
 
 (defgraft aqmesh-sensor->graph
-  "Pipeline to convert the tabular AQMesh sensor sheet into graph data."
+  "Pipeline to convert the tabular AQMesh sensor data into graph data."
   convert-aqmesh-sensor sensor-template)
 
 (defgraft aqmesh-sensor->graph
-  "Pipeline to convert the tabular AQMesh sensor concept scheme"
+  "Pipeline to convert the tabular AQMesh sensor concept scheme into graph data."
   convert-sensor-parameter-concept-scheme sensor-parameter-concept-scheme-template)
 
+;;
+;; Pipelines
+;;
+
 (defn aqmesh-sensor-data-pipeline
-  "Pipeline to convert the tabular AQMesh sensor data sheet into graph data."
+  "Pipeline to convert the tabular AQMesh sensor measure data sheet into graph data."
   [data-file output]
   (-> (convert-aqmesh-sensor-data data-file)
       aqmesh-sensor-template
@@ -142,7 +157,7 @@
   (println "Grafted: " data-file))
 
 (defn aqmesh-sensor-pipeline
-  "Pipeline to convert the tabular AQMesh sensor sheet into graph data."
+  "Pipeline to convert the tabular AQMesh sensor data into graph data."
   [data-file output]
   (-> (convert-aqmesh-sensor data-file)
       sensor-template

@@ -3,6 +3,10 @@
             [clojure.string :as st]
             [aqmesh-graft.prefix :refer :all]))
 
+;;
+;; String Transformation
+;;
+
 (defn s [s] (if (seq s) (io/s s) ""))
 
 (defn trim [s] (if (seq s) (st/trim s) ""))
@@ -56,19 +60,51 @@
         titleize
         remove-blanks)))
 
+;;
+;; Parsing
+;;
+
 (defn parse-sensor
+  "Get the sensor number from the filename"
   [s]
   (when (seq s)
     (let [a (-> s (st/replace ".csv" "") (st/split #"_"))]
       (last a))))
 
+(defmulti parseValue class)
+(defmethod parseValue :default            [x] x)
+(defmethod parseValue nil                 [x] nil)
+(defmethod parseValue java.lang.Character [x] (Character/getNumericValue x))
+(defmethod parseValue java.lang.String    [x] (if (= "" x)
+                                                nil
+                                                (if (.contains x ".")
+                                                  (Double/parseDouble x)
+                                                  (Integer/parseInt x))))
+
+(defn belowLOD?
+  "When a AQMesh sensor data value concentration is negative it's
+  because it's below limit of detection TODO use value given in the
+  source data"
+  [s]
+  (when (seq s)
+    (let [v (parseValue s)]
+      (when (< v 0)
+        belowLOD))))
+
+;;
+;; Date
+;;
+
 (defn organize-date
+  "Transform date dd/mm/yyyy ~> yyyy-mm-dd"
   [date]
   (when (seq date)
     (let [[d m y] (st/split date #"/")]
       (apply str (interpose "-" [y m d])))))
 
 (defn ->datetime
+  "Given a date dd/mm/yyyy and a time hh:mm
+  returns a XSDDatetime"
   [date time]
   (when (and (seq date) (seq time))
     (let [d (organize-date date)
@@ -76,9 +112,14 @@
       (read-string (str "#inst " (pr-str dt))))))
 
 (defn time-slug
+  "Transform time to use in a slug"
   [s]
   (when (seq s)
     (st/replace s ":" "-")))
+
+;;
+;; Measure cleaning
+;;
 
 (def measure-slug
   {:no-final "NO"
@@ -106,20 +147,3 @@
    :8-temp-celcius "Temperature"
    :9-rh-% "Relative Humidity"
    :10-ap-mbar "Air Pressure"})
-
-(defmulti parseValue class)
-(defmethod parseValue :default            [x] x)
-(defmethod parseValue nil                 [x] nil)
-(defmethod parseValue java.lang.Character [x] (Character/getNumericValue x))
-(defmethod parseValue java.lang.String    [x] (if (= "" x)
-                                                nil
-                                                (if (.contains x ".")
-                                                  (Double/parseDouble x)
-                                                  (Integer/parseInt x))))
-
-(defn belowLOD?
-  [s]
-  (when (seq s)
-    (let [v (parseValue s)]
-      (when (< v 0)
-        belowLOD))))
