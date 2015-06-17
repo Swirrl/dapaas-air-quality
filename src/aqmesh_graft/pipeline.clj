@@ -140,7 +140,7 @@
   "Pipeline to convert the tabular AQMesh sensor data into graph data."
   convert-aqmesh-sensor sensor-template)
 
-(defgraft aqmesh-sensor->graph
+(defgraft sensor-parameter-concept-scheme->graph
   "Pipeline to convert the tabular AQMesh sensor concept scheme into graph data."
   convert-sensor-parameter-concept-scheme sensor-parameter-concept-scheme-template)
 
@@ -164,7 +164,7 @@
       (import-rdf output))
   (println "Grafted: " data-file))
 
-(defn aqmesh-sensor-pipeline
+(defn sensor-parameter-concept-scheme-pipeline
   "Pipeline to convert the tabular AQMesh sensor concept scheme"
   [data-file output]
   (-> (convert-sensor-parameter-concept-scheme data-file)
