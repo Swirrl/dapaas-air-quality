@@ -1,0 +1,105 @@
+
+<http://data.dapaas.eu/def/air-quality/ConcentrationNO> a <http://www.w3.org/2004/02/skos/core#Concept> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration NO" ;
+	<http://www.w3.org/2004/02/skos/core#prefLabel> "Concentration NO" ;
+	<http://www.w3.org/2004/02/skos/core#inScheme> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> ;
+	<http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> .
+
+<http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> a <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "AQMesh Sensor Parameter Concept Scheme" ;
+	<http://purl.org/dc/terms/issued> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/modified> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/> ;
+	<http://purl.org/dc/terms/publisher> <http://data.dapaas.eu/AQMesh> ;
+	<http://purl.org/dc/terms/references> <http://docs.publishmydata.com> ;
+	<http://www.w3.org/2004/02/skos/core#hasTopConcept> <http://data.dapaas.eu/def/air-quality/ConcentrationNO> .
+
+<http://data.dapaas.eu/def/air-quality/ConcentrationNO2> a <http://www.w3.org/2004/02/skos/core#Concept> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration NO2" ;
+	<http://www.w3.org/2004/02/skos/core#prefLabel> "Concentration NO2" ;
+	<http://www.w3.org/2004/02/skos/core#inScheme> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> ;
+	<http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> .
+
+<http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> a <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "AQMesh Sensor Parameter Concept Scheme" ;
+	<http://purl.org/dc/terms/issued> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/modified> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/> ;
+	<http://purl.org/dc/terms/publisher> <http://data.dapaas.eu/AQMesh> ;
+	<http://purl.org/dc/terms/references> <http://docs.publishmydata.com> ;
+	<http://www.w3.org/2004/02/skos/core#hasTopConcept> <http://data.dapaas.eu/def/air-quality/ConcentrationNO2> .
+
+<http://data.dapaas.eu/def/air-quality/ConcentrationCO> a <http://www.w3.org/2004/02/skos/core#Concept> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration CO" ;
+	<http://www.w3.org/2004/02/skos/core#prefLabel> "Concentration CO" ;
+	<http://www.w3.org/2004/02/skos/core#inScheme> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> ;
+	<http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> .
+
+<http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> a <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "AQMesh Sensor Parameter Concept Scheme" ;
+	<http://purl.org/dc/terms/issued> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/modified> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/> ;
+	<http://purl.org/dc/terms/publisher> <http://data.dapaas.eu/AQMesh> ;
+	<http://purl.org/dc/terms/references> <http://docs.publishmydata.com> ;
+	<http://www.w3.org/2004/02/skos/core#hasTopConcept> <http://data.dapaas.eu/def/air-quality/ConcentrationCO> .
+
+<http://data.dapaas.eu/def/air-quality/ConcentrationO3> a <http://www.w3.org/2004/02/skos/core#Concept> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration O3" ;
+	<http://www.w3.org/2004/02/skos/core#prefLabel> "Concentration O3" ;
+	<http://www.w3.org/2004/02/skos/core#inScheme> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> ;
+	<http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> .
+
+<http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> a <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "AQMesh Sensor Parameter Concept Scheme" ;
+	<http://purl.org/dc/terms/issued> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/modified> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/> ;
+	<http://purl.org/dc/terms/publisher> <http://data.dapaas.eu/AQMesh> ;
+	<http://purl.org/dc/terms/references> <http://docs.publishmydata.com> ;
+	<http://www.w3.org/2004/02/skos/core#hasTopConcept> <http://data.dapaas.eu/def/air-quality/ConcentrationO3> .
+
+<http://data.dapaas.eu/def/air-quality/Temperature> a <http://www.w3.org/2004/02/skos/core#Concept> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Temperature" ;
+	<http://www.w3.org/2004/02/skos/core#prefLabel> "Temperature" ;
+	<http://www.w3.org/2004/02/skos/core#inScheme> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> ;
+	<http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> .
+
+<http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> a <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "AQMesh Sensor Parameter Concept Scheme" ;
+	<http://purl.org/dc/terms/issued> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/modified> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/> ;
+	<http://purl.org/dc/terms/publisher> <http://data.dapaas.eu/AQMesh> ;
+	<http://purl.org/dc/terms/references> <http://docs.publishmydata.com> ;
+	<http://www.w3.org/2004/02/skos/core#hasTopConcept> <http://data.dapaas.eu/def/air-quality/Temperature> .
+
+<http://data.dapaas.eu/def/air-quality/RelativeHumidity> a <http://www.w3.org/2004/02/skos/core#Concept> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Relative Humidity" ;
+	<http://www.w3.org/2004/02/skos/core#prefLabel> "Relative Humidity" ;
+	<http://www.w3.org/2004/02/skos/core#inScheme> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> ;
+	<http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> .
+
+<http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> a <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "AQMesh Sensor Parameter Concept Scheme" ;
+	<http://purl.org/dc/terms/issued> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/modified> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/> ;
+	<http://purl.org/dc/terms/publisher> <http://data.dapaas.eu/AQMesh> ;
+	<http://purl.org/dc/terms/references> <http://docs.publishmydata.com> ;
+	<http://www.w3.org/2004/02/skos/core#hasTopConcept> <http://data.dapaas.eu/def/air-quality/RelativeHumidity> .
+
+<http://data.dapaas.eu/def/air-quality/AirPressure> a <http://www.w3.org/2004/02/skos/core#Concept> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Air Pressure" ;
+	<http://www.w3.org/2004/02/skos/core#prefLabel> "Air Pressure" ;
+	<http://www.w3.org/2004/02/skos/core#inScheme> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> ;
+	<http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> .
+
+<http://data.dapaas.eu/def/concept-scheme/air-quality/parameter> a <http://www.w3.org/2004/02/skos/core#ConceptScheme> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "AQMesh Sensor Parameter Concept Scheme" ;
+	<http://purl.org/dc/terms/issued> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/modified> "2015-06-16T00:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+	<http://purl.org/dc/terms/license> <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/> ;
+	<http://purl.org/dc/terms/publisher> <http://data.dapaas.eu/AQMesh> ;
+	<http://purl.org/dc/terms/references> <http://docs.publishmydata.com> ;
+	<http://www.w3.org/2004/02/skos/core#hasTopConcept> <http://data.dapaas.eu/def/air-quality/AirPressure> .
