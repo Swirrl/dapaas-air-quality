@@ -1,7 +1,7 @@
 
-<http://data.dapaas.eu/data/2015-05-31/11-00/1100/NO> a <http://purl.org/linked-data/cube#Observation> ;
-	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration NO, sensor 1100, 31/05/2015, 11:00" ;
-	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/1100> ;
+<http://data.dapaas.eu/data/2015-05-31/11-00/828150/NO> a <http://purl.org/linked-data/cube#Observation> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration NO, sensor 828150, 31/05/2015, 11:00" ;
+	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/828150> ;
 	<http://purl.org/linked-data/cube#dataSet> <http://data.dapaas.eu/data/2015-05-31/11-00> ;
 	<http://data.dapaas.eu/def/dimensions/parameter> <http://data.dapaas.eu/def/air-quality/ConcentrationNO> ;
 	<http://purl.org/linked-data/sdmx/2009/dimension#refTime> "2015-05-31T13:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
@@ -9,9 +9,9 @@
 	<http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://data.dapaas.eu/def/unit/partPerBillion> ;
 	<http://purl.org/linked-data/sdmx/2009/attribute#obsStatus> <http://data.dapaas.eu/def/belowLimitOfDetection> .
 
-<http://data.dapaas.eu/data/2015-05-31/11-00/1100/NO2> a <http://purl.org/linked-data/cube#Observation> ;
-	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration NO2, sensor 1100, 31/05/2015, 11:00" ;
-	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/1100> ;
+<http://data.dapaas.eu/data/2015-05-31/11-00/828150/NO2> a <http://purl.org/linked-data/cube#Observation> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration NO2, sensor 828150, 31/05/2015, 11:00" ;
+	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/828150> ;
 	<http://purl.org/linked-data/cube#dataSet> <http://data.dapaas.eu/data/2015-05-31/11-00> ;
 	<http://data.dapaas.eu/def/dimensions/parameter> <http://data.dapaas.eu/def/air-quality/ConcentrationNO2> ;
 	<http://purl.org/linked-data/sdmx/2009/dimension#refTime> "2015-05-31T13:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
@@ -19,45 +19,45 @@
 	<http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://data.dapaas.eu/def/unit/partPerBillion> ;
 	<http://purl.org/linked-data/sdmx/2009/attribute#obsStatus> <http://data.dapaas.eu/def/belowLimitOfDetection> .
 
-<http://data.dapaas.eu/data/2015-05-31/11-00/1100/CO> a <http://purl.org/linked-data/cube#Observation> ;
-	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration CO, sensor 1100, 31/05/2015, 11:00" ;
-	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/1100> ;
+<http://data.dapaas.eu/data/2015-05-31/11-00/828150/CO> a <http://purl.org/linked-data/cube#Observation> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration CO, sensor 828150, 31/05/2015, 11:00" ;
+	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/828150> ;
 	<http://purl.org/linked-data/cube#dataSet> <http://data.dapaas.eu/data/2015-05-31/11-00> ;
 	<http://data.dapaas.eu/def/dimensions/parameter> <http://data.dapaas.eu/def/air-quality/ConcentrationCO> ;
 	<http://purl.org/linked-data/sdmx/2009/dimension#refTime> "2015-05-31T13:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
 	<http://purl.org/linked-data/sdmx/2009/measure#obsValue> "87.961"^^<http://www.w3.org/2001/XMLSchema#double> ;
 	<http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://data.dapaas.eu/def/unit/partPerBillion> .
 
-<http://data.dapaas.eu/data/2015-05-31/11-00/1100/O3> a <http://purl.org/linked-data/cube#Observation> ;
-	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration O3, sensor 1100, 31/05/2015, 11:00" ;
-	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/1100> ;
+<http://data.dapaas.eu/data/2015-05-31/11-00/828150/O3> a <http://purl.org/linked-data/cube#Observation> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Concentration O3, sensor 828150, 31/05/2015, 11:00" ;
+	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/828150> ;
 	<http://purl.org/linked-data/cube#dataSet> <http://data.dapaas.eu/data/2015-05-31/11-00> ;
 	<http://data.dapaas.eu/def/dimensions/parameter> <http://data.dapaas.eu/def/air-quality/ConcentrationO3> ;
 	<http://purl.org/linked-data/sdmx/2009/dimension#refTime> "2015-05-31T13:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
 	<http://purl.org/linked-data/sdmx/2009/measure#obsValue> "27.812"^^<http://www.w3.org/2001/XMLSchema#double> ;
 	<http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://data.dapaas.eu/def/unit/partPerBillion> .
 
-<http://data.dapaas.eu/data/2015-05-31/11-00/1100/temperature> a <http://purl.org/linked-data/cube#Observation> ;
-	<http://www.w3.org/2000/01/rdf-schema#label> "Temperature, sensor 1100, 31/05/2015, 11:00" ;
-	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/1100> ;
+<http://data.dapaas.eu/data/2015-05-31/11-00/828150/temperature> a <http://purl.org/linked-data/cube#Observation> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Temperature, sensor 828150, 31/05/2015, 11:00" ;
+	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/828150> ;
 	<http://purl.org/linked-data/cube#dataSet> <http://data.dapaas.eu/data/2015-05-31/11-00> ;
 	<http://data.dapaas.eu/def/dimensions/parameter> <http://data.dapaas.eu/def/air-quality/Temperature> ;
 	<http://purl.org/linked-data/sdmx/2009/dimension#refTime> "2015-05-31T13:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
 	<http://purl.org/linked-data/sdmx/2009/measure#obsValue> "15.2"^^<http://www.w3.org/2001/XMLSchema#double> ;
 	<http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#DegreeCelsius> .
 
-<http://data.dapaas.eu/data/2015-05-31/11-00/1100/relativeHumidity> a <http://purl.org/linked-data/cube#Observation> ;
-	<http://www.w3.org/2000/01/rdf-schema#label> "Relative Humidity, sensor 1100, 31/05/2015, 11:00" ;
-	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/1100> ;
+<http://data.dapaas.eu/data/2015-05-31/11-00/828150/relativeHumidity> a <http://purl.org/linked-data/cube#Observation> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Relative Humidity, sensor 828150, 31/05/2015, 11:00" ;
+	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/828150> ;
 	<http://purl.org/linked-data/cube#dataSet> <http://data.dapaas.eu/data/2015-05-31/11-00> ;
 	<http://data.dapaas.eu/def/dimensions/parameter> <http://data.dapaas.eu/def/air-quality/RelativeHumidity> ;
 	<http://purl.org/linked-data/sdmx/2009/dimension#refTime> "2015-05-31T13:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
 	<http://purl.org/linked-data/sdmx/2009/measure#obsValue> "55.7"^^<http://www.w3.org/2001/XMLSchema#double> ;
 	<http://purl.org/linked-data/sdmx/2009/attribute#unitMeasure> <http://data.dapaas.eu/def/unit/percentage> .
 
-<http://data.dapaas.eu/data/2015-05-31/11-00/1100/airPressure> a <http://purl.org/linked-data/cube#Observation> ;
-	<http://www.w3.org/2000/01/rdf-schema#label> "Air Pressure, sensor 1100, 31/05/2015, 11:00" ;
-	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/1100> ;
+<http://data.dapaas.eu/data/2015-05-31/11-00/828150/airPressure> a <http://purl.org/linked-data/cube#Observation> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Air Pressure, sensor 828150, 31/05/2015, 11:00" ;
+	<http://data.dapaas.eu/def/sensor> <http://data.dapaas.eu/id/sensor/828150> ;
 	<http://purl.org/linked-data/cube#dataSet> <http://data.dapaas.eu/data/2015-05-31/11-00> ;
 	<http://data.dapaas.eu/def/dimensions/parameter> <http://data.dapaas.eu/def/air-quality/AirPressure> ;
 	<http://purl.org/linked-data/sdmx/2009/dimension#refTime> "2015-05-31T13:00:00.000+02:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
