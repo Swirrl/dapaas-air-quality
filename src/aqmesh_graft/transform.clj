@@ -69,7 +69,7 @@
   [s]
   (when (seq s)
     (let [a (-> s (st/replace ".csv" "") (st/split #"_"))]
-      (last a))))
+      (first a))))
 
 (defmulti parseValue class)
 (defmethod parseValue :default            [x] x)

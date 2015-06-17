@@ -1,0 +1,5 @@
+
+<http://data.dapaas.eu/id/sensor/733150> a <http://data.dapaas.eu/def/AQMeshSensor> ;
+	<http://www.w3.org/2000/01/rdf-schema#label> "Sensor 733150" ;
+	<http://www.w3.org/2003/01/geo/wgs84_pos#long> "10.725038" ;
+	<http://www.w3.org/2003/01/geo/wgs84_pos#lat> "59.932383" .

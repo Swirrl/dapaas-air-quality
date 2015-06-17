@@ -104,13 +104,13 @@
 (defpipe convert-aqmesh-sensor
   "Pipeline to convert tabular AQMesh sensor data"
   [data-file]
-  (let [sensor (parse-sensor data-file)]
+  (let [ss (parse-sensor data-file)]
     (-> (read-dataset data-file)
         (columns ["c" "d"])
         (make-dataset [:longtitude :latitude])
         (drop-rows 1)
         (take-rows 1)
-        (add-column :sensor-no sensor)
+        (add-column :sensor-no ss)
         (derive-column :sensor-uri [:sensor-no] sensor-id))))
 
 (defpipe convert-sensor-parameter-concept-scheme
