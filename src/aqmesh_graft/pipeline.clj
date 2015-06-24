@@ -78,10 +78,8 @@
   [data-file]
   (let [sensor (parse-sensor data-file)]
     (-> (read-dataset data-file)
-        (take-rows 2)
-; There seems to be a last blank column ~> problem 'move-first-row-to-header
-        (columns ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
-                  "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "aa" "ab" "ac" "ad" "ae"])
+        ;(take-rows 2)
+        ;; There is a small problem in the CSV as the header columns have a blank last column (thanks to a trailing ,)
         (make-dataset move-first-row-to-header)
         (rename-columns (comp keyword slugify))
         (columns [:date :time :no-final :no2-final :co-final :o3-final :8-temp-celcius :9-rh-% :10-ap-mbar])
@@ -106,7 +104,6 @@
   [data-file]
   (let [ss (parse-sensor data-file)]
     (-> (read-dataset data-file)
-        (columns ["c" "d"])
         (make-dataset [:longtitude :latitude])
         (drop-rows 1)
         (take-rows 1)
@@ -117,10 +114,8 @@
   "Pipeline to convert tabular AQMesh sensor measure concept scheme"
   [data-file]
   (-> (read-dataset data-file)
-      (take-rows 2)
-      (columns ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"
-                "q" "r" "s" "t" "u" "v" "w" "x" "y" "z" "aa" "ab" "ac" "ad" "ae"])
       (make-dataset move-first-row-to-header)
+      (take-rows 1)
       (rename-columns (comp keyword slugify))
       (columns [:date :time :no-final :no2-final :co-final :o3-final :8-temp-celcius :9-rh-% :10-ap-mbar])
       (melt [:date :time])
