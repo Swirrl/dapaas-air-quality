@@ -3,21 +3,204 @@
                                      mapc drop-rows read-dataset make-dataset
                                      move-first-row-to-header _ graph-fn
                                      take-rows rename-columns add-column]]
+            [clojure.string]
+            [grafter.rdf.io :as io]
+            [grafter.rdf :refer [prefixer]]
             [grafter.tabular.melt :refer [melt]]
             [grafter.rdf.templater :refer [graph]]
             [grafter.vocabularies.rdf :refer [rdf:a rdfs:label]]
             [grafter.vocabularies.qb :refer [qb:Observation qb:dataSet]]
             [grafter.vocabularies.sdmx-measure :refer [sdmx-measure:obsValue]]
-            [grafter.vocabularies.sdmx-attribute :refer [sdmx-attribute:unitMeasure]]
+            [grafter.vocabularies.sdmx-attribute :refer [sdmx-attribute sdmx-attribute:unitMeasure]]
+            [grafter.vocabularies.sdmx-attribute :refer [sdmx-attribute]]
             [grafter.vocabularies.skos :refer [skos:prefLabel skos:inScheme skos:note
                                                skos:ConceptScheme skos:hasTopConcept
                                                skos:topConceptOf skos:Concept]]
             [grafter.vocabularies.dcterms :refer [dcterms:issued dcterms:license
                                                   dcterms:references dcterms:modified
-                                                  dcterms:publisher]]
-            [aqmesh-graft.prefix :refer :all]
-            [aqmesh-graft.transform :refer :all]
-            [aqmesh-graft.util :refer [import-rdf]]))
+                                                  dcterms:publisher]]))
+
+;; Bases
+
+(def base-domain (prefixer "http://data.dapaas.eu"))
+(def base-graph (prefixer (base-domain "/graph/")))
+(def base-id (prefixer (base-domain "/id/")))
+(def base-vocab (prefixer (base-domain "/def/")))
+(def base-data (prefixer (base-domain "/data/")))
+(def base-concept (prefixer (base-vocab "concept-scheme/")))
+
+;; PMD
+
+(def licence "http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/")
+(def pmd-doc "http://docs.publishmydata.com")
+(def AQMesh (base-domain "/AQMesh"))
+
+;; Vocabularies
+
+(def sdmx-attribute:obsStatus (sdmx-attribute "obsStatus"))
+(def sdmx-dimension:refTime "http://purl.org/linked-data/sdmx/2009/dimension#refTime")
+(def qudt (prefixer "http://www.qudt.org/qudt/owl/1.0.0/unit/Instances.html#"))
+(def qudt:Millibar (qudt "Millibar"))
+(def qudt:DegreeCelsius (qudt "DegreeCelsius"))
+(def ppb (base-vocab "unit/partPerBillion"))
+(def percentage (base-vocab "unit/percentage"))
+(def geo:long "http://www.w3.org/2003/01/geo/wgs84_pos#long")
+(def geo:lat "http://www.w3.org/2003/01/geo/wgs84_pos#lat")
+(def belowLOD (base-vocab "belowLimitOfDetection"))
+
+;; Prefixes
+
+(def dimension (prefixer (base-vocab "dimensions/")))
+(def parameter (dimension "parameter"))
+(def sensor-id (prefixer (base-id "sensor/")))
+(def AQMeshSensor (base-vocab "AQMeshSensor"))
+(def sensor (base-vocab "sensor"))
+(def parameter-def (prefixer (base-vocab "air-quality/")))
+(def parameter-cs (base-concept "air-quality/parameter"))
+
+
+(defn s [s] (if (seq s) (io/s s) ""))
+
+(defn trim [s] (if (seq s) (clojure.string/trim s) ""))
+
+(defn lower-case [s] (if (seq s) (clojure.string/lower-case s) ""))
+
+(defn capitalize [s] (if (seq s) (-> s trim clojure.string/capitalize) ""))
+
+(defn titleize
+  "Capitalizes each word in a string"
+  [s]
+  (when (seq s)
+    (let [a (clojure.string/split s #" ")
+          c (map clojure.string/capitalize a)]
+      (->> c (interpose " ") (apply str) trim))))
+
+(defn slugify
+  "Cleans and slugifies string"
+  [s]
+  (let [replace clojure.string/replace]
+    (when (seq s)
+      (-> s
+          clojure.string/trim
+          clojure.string/lower-case
+          (replace "(" "-")
+          (replace ")" "")
+          (replace "  " "")
+          (replace "," "-")
+          (replace "." "")
+          (replace " " "-")
+          (replace "/" "-")
+          (replace "'" "")
+          (replace "---" "-")
+          (replace "--" "-")))))
+
+(defn slug-combine
+  "Combines slugs to create URI"
+  [& args]
+  (apply str (interpose "/" args)))
+
+(defn remove-blanks
+  "Removes blanks in a string"
+  [s]
+  (when (seq s)
+    (clojure.string/replace s " " "")))
+
+(defn title-slug
+  "String -> PascalCase"
+  [s]
+  (when (seq s)
+    (-> s
+        titleize
+        remove-blanks)))
+
+;;
+;; Parsing
+;;
+
+(defn parse-sensor
+  "Get the sensor number from the filename"
+  [s]
+  (when (seq s)
+    (let [a (-> s (clojure.string/replace ".csv" "") (clojure.string/split #"_"))]
+      (first a))))
+
+(defmulti parseValue class)
+(defmethod parseValue :default            [x] x)
+(defmethod parseValue nil                 [x] nil)
+(defmethod parseValue java.lang.Character [x] (Character/getNumericValue x))
+(defmethod parseValue java.lang.String    [x] (if (= "" x)
+                                                nil
+                                                (if (.contains x ".")
+                                                  (Double/parseDouble x)
+                                                  (Integer/parseInt x))))
+
+(defn belowLOD?
+  "When a AQMesh sensor data value concentration is negative it's
+  because it's below limit of detection TODO use value given in the
+  source data"
+  [s]
+  (when (seq s)
+    (let [v (parseValue s)]
+      (when (< v 0)
+        belowLOD))))
+
+;;
+;; Date
+;;
+
+(defn organize-date
+  "Transform date dd/mm/yyyy ~> yyyy-mm-dd"
+  [date]
+  (when (seq date)
+    (let [[d m y] (clojure.string/split date #"/")]
+      (apply str (interpose "-" [y m d])))))
+
+(defn ->datetime
+  "Given a date dd/mm/yyyy and a time hh:mm
+  returns a XSDDatetime"
+  [date time]
+  (when (and (seq date) (seq time))
+    (let [d (organize-date date)
+          dt (str d "T" time)]
+      (read-string (str "#inst " (pr-str dt))))))
+
+(defn time-slug
+  "Transform time to use in a slug"
+  [s]
+  (when (seq s)
+    (clojure.string/replace s ":" "-")))
+
+;;
+;; Measure cleaning
+;;
+
+(def measure-slug
+  {:no-final "NO"
+   :no2-final "NO2"
+   :co-final "CO"
+   :o3-final "O3"
+   :8-temp-celcius "temperature"
+   :9-rh-% "relativeHumidity"
+   :10-ap-mbar "airPressure"})
+
+(def measure-unit
+  {:no-final ppb
+   :no2-final ppb
+   :co-final ppb
+   :o3-final ppb
+   :8-temp-celcius qudt:DegreeCelsius
+   :9-rh-% percentage
+   :10-ap-mbar qudt:Millibar})
+
+(def measure-label
+  {:no-final "Concentration NO"
+   :no2-final "Concentration NO2"
+   :co-final "Concentration CO"
+   :o3-final "Concentration O3"
+   :8-temp-celcius "Temperature"
+   :9-rh-% "Relative Humidity"
+   :10-ap-mbar "Air Pressure"})
+
 
 ;;
 ;; Templates
@@ -138,31 +321,3 @@
 (defgraft sensor-parameter-concept-scheme->graph
   "Pipeline to convert the tabular AQMesh sensor concept scheme into graph data."
   convert-sensor-parameter-concept-scheme sensor-parameter-concept-scheme-template)
-
-;;
-;; Pipelines
-;;
-
-(defn aqmesh-sensor-data-pipeline
-  "Pipeline to convert the tabular AQMesh sensor measure data sheet into graph data."
-  [data-file output]
-  (-> (convert-aqmesh-sensor-data data-file)
-      aqmesh-sensor-template
-      (import-rdf output))
-  (println "Grafted: " data-file))
-
-(defn aqmesh-sensor-pipeline
-  "Pipeline to convert the tabular AQMesh sensor data into graph data."
-  [data-file output]
-  (-> (convert-aqmesh-sensor data-file)
-      sensor-template
-      (import-rdf output))
-  (println "Grafted: " data-file))
-
-(defn sensor-parameter-concept-scheme-pipeline
-  "Pipeline to convert the tabular AQMesh sensor concept scheme"
-  [data-file output]
-  (-> (convert-sensor-parameter-concept-scheme data-file)
-      sensor-parameter-concept-scheme-template
-      (import-rdf output))
-  (println "Grafted: " data-file))

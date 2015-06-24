@@ -48,7 +48,10 @@
   (ftp/with-ftp [client ftp-url]
     (ftp/client-get client file)
     (f file)
-    (fs/delete file)))
+    ;; If you want to delete files after downloading them uncomment this line.
+    ;; Otherwise they'll be downloaded into your local directory.
+    ;;(fs/delete file)
+    ))
 
 (defn -main
   "Get the source data from the FTP server and apply the pipeline
