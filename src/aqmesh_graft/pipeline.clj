@@ -1,24 +1,15 @@
-(ns aqmesh-graft.pipeline
-  (:require [grafter.tabular :refer [defpipe defgraft columns derive-column
-                                     mapc drop-rows read-dataset make-dataset
-                                     move-first-row-to-header _ graph-fn
-                                     take-rows rename-columns add-column]]
-            [clojure.string]
-            [grafter.rdf.io :as io]
-            [grafter.rdf :refer [prefixer]]
-            [grafter.tabular.melt :refer [melt]]
-            [grafter.rdf.templater :refer [graph]]
-            [grafter.vocabularies.rdf :refer [rdf:a rdfs:label]]
-            [grafter.vocabularies.qb :refer [qb:Observation qb:dataSet]]
-            [grafter.vocabularies.sdmx-measure :refer [sdmx-measure:obsValue]]
-            [grafter.vocabularies.sdmx-attribute :refer [sdmx-attribute sdmx-attribute:unitMeasure]]
-            [grafter.vocabularies.sdmx-attribute :refer [sdmx-attribute]]
-            [grafter.vocabularies.skos :refer [skos:prefLabel skos:inScheme skos:note
-                                               skos:ConceptScheme skos:hasTopConcept
-                                               skos:topConceptOf skos:Concept]]
-            [grafter.vocabularies.dcterms :refer [dcterms:issued dcterms:license
-                                                  dcterms:references dcterms:modified
-                                                  dcterms:publisher]]))
+;; (ns aqmesh-graft.pipeline
+;;   (:require [grafter.tabular :refer :all]
+;;             [clojure.string]
+;;             [grafter.rdf :refer [prefixer s]]
+;;             [grafter.rdf.templater :refer [graph]]
+;;             [grafter.vocabularies.rdf :refer :all]
+;;             [grafter.vocabularies.qb :refer :all]
+;;             [grafter.vocabularies.sdmx-measure :refer :all]
+;;             [grafter.vocabularies.sdmx-attribute :refer :all]
+;;             [grafter.vocabularies.skos :refer :all]
+;;             [grafter.vocabularies.foaf :refer :all]
+;;             [grafter.vocabularies.dcterms :refer :all]))
 
 ;; Bases
 
@@ -59,28 +50,28 @@
 (def parameter-cs (base-concept "air-quality/parameter"))
 
 
-(defn s [s] (if (seq s) (io/s s) ""))
+(defn ->s [st] (if st (s st) ""))
 
-(defn trim [s] (if (seq s) (clojure.string/trim s) ""))
+(defn trim [st] (if st (clojure.string/trim st) ""))
 
-(defn lower-case [s] (if (seq s) (clojure.string/lower-case s) ""))
+(defn lower-case [st] (if st (clojure.string/lower-case st) ""))
 
-(defn capitalize [s] (if (seq s) (-> s trim clojure.string/capitalize) ""))
+(defn capitalize [st] (if st (-> st trim clojure.string/capitalize) ""))
 
 (defn titleize
   "Capitalizes each word in a string"
-  [s]
-  (when (seq s)
-    (let [a (clojure.string/split s #" ")
+  [st]
+  (when (seq st)
+    (let [a (clojure.string/split st #" ")
           c (map clojure.string/capitalize a)]
       (->> c (interpose " ") (apply str) trim))))
 
 (defn slugify
   "Cleans and slugifies string"
-  [s]
+  [st]
   (let [replace clojure.string/replace]
-    (when (seq s)
-      (-> s
+    (if (seq st)
+      (-> (str st)
           clojure.string/trim
           clojure.string/lower-case
           (replace "(" "-")
@@ -92,7 +83,8 @@
           (replace "/" "-")
           (replace "'" "")
           (replace "---" "-")
-          (replace "--" "-")))))
+          (replace "--" "-"))
+      (throw (RuntimeException. (str "Cannot slugify value '" st "'"))))))
 
 (defn slug-combine
   "Combines slugs to create URI"
@@ -101,15 +93,15 @@
 
 (defn remove-blanks
   "Removes blanks in a string"
-  [s]
-  (when (seq s)
-    (clojure.string/replace s " " "")))
+  [st]
+  (when (seq st)
+    (clojure.string/replace st " " "")))
 
 (defn title-slug
   "String -> PascalCase"
-  [s]
-  (when (seq s)
-    (-> s
+  [st]
+  (when (seq st)
+    (-> st
         titleize
         remove-blanks)))
 
@@ -119,9 +111,9 @@
 
 (defn parse-sensor
   "Get the sensor number from the filename"
-  [s]
-  (when (seq s)
-    (let [a (-> s (clojure.string/replace ".csv" "") (clojure.string/split #"_"))]
+  [st]
+  (when (seq st)
+    (let [a (-> st (clojure.string/replace #"\..*" "") (clojure.string/split #"_"))]
       (first a))))
 
 (defmulti parseValue class)
@@ -138,9 +130,9 @@
   "When a AQMesh sensor data value concentration is negative it's
   because it's below limit of detection TODO use value given in the
   source data"
-  [s]
-  (when (seq s)
-    (let [v (parseValue s)]
+  [st]
+  (when (seq st)
+    (let [v (parseValue st)]
       (when (< v 0)
         belowLOD))))
 
@@ -166,9 +158,9 @@
 
 (defn time-slug
   "Transform time to use in a slug"
-  [s]
-  (when (seq s)
-    (clojure.string/replace s ":" "-")))
+  [st]
+  (when (seq st)
+    (clojure.string/replace st ":" "-")))
 
 ;;
 ;; Measure cleaning
@@ -201,6 +193,9 @@
    :9-rh-% "Relative Humidity"
    :10-ap-mbar "Air Pressure"})
 
+(defn add-filename-to-column [ds destination-column]
+  (let [fname (:grafter.tabular/data-source (meta ds))]
+    (add-column ds destination-column fname)))
 
 ;;
 ;; Templates
@@ -211,10 +206,10 @@
             (graph (base-graph "air-quality")
                    [obs-uri
                     [rdf:a qb:Observation]
-                    [rdfs:label (s (str label
-                                        ", sensor " sensor-no
-                                        ", " date
-                                        ", " time))]
+                    [rdfs:label (->s (str label
+                                          ", sensor " sensor-no
+                                          ", " date
+                                          ", " time))]
                     [sensor sensor-uri]
                     [qb:dataSet ds]
                     [parameter param-uri]
@@ -228,23 +223,23 @@
             (graph (base-graph "sensor")
                    [sensor-uri
                     [rdf:a AQMeshSensor]
-                    [rdfs:label (s (str "Sensor " sensor-no))]
-                    [geo:long (s longtitude)]
-                    [geo:lat (s latitude)]])))
+                    [rdfs:label (->s (str "Sensor " sensor-no))]
+                    [geo:long (->s longtitude)]
+                    [geo:lat (->s latitude)]])))
 
 (def sensor-parameter-concept-scheme-template
   (graph-fn [{:keys [param-uri label]}]
             (graph (base-graph "sensor-parameter-concept-scheme")
                    [param-uri
                     [rdf:a skos:Concept]
-                    [rdfs:label (s label)]
-                    [skos:prefLabel (s label)]
+                    [rdfs:label (->s label)]
+                    [skos:prefLabel (->s label)]
                     [skos:inScheme parameter-cs]
                     [skos:topConceptOf parameter-cs]]
 
                    [parameter-cs
                     [rdf:a skos:ConceptScheme]
-                    [rdfs:label (s "AQMesh Sensor Parameter Concept Scheme")]
+                    [rdfs:label (->s "AQMesh Sensor Parameter Concept Scheme")]
                     [dcterms:issued (java.util.Date. "2015/06/16")]
                     [dcterms:modified (java.util.Date. "2015/06/16")]
                     [dcterms:license licence]
@@ -256,47 +251,50 @@
 ;; Pipes
 ;;
 
+
 (defpipe convert-aqmesh-sensor-data
   "Pipeline to convert tabular AQMesh sensor measure data"
   [data-file]
-  (let [sensor (parse-sensor data-file)]
-    (-> (read-dataset data-file)
-        ;(take-rows 2)
-        ;; There is a small problem in the CSV as the header columns have a blank last column (thanks to a trailing ,)
-        (make-dataset move-first-row-to-header)
-        (rename-columns (comp keyword slugify))
-        (columns [:date :time :no-final :no2-final :co-final :o3-final :8-temp-celcius :9-rh-% :10-ap-mbar])
-        (melt [:date :time])
-        (add-column :sensor-no sensor)
-        (derive-column :datetime [:date :time] ->datetime)
-        (derive-column :sensor-uri [:sensor-no] sensor-id)
-        (derive-column :date-slug [:date] organize-date)
-        (derive-column :time-slug [:time] time-slug)
-        (derive-column :measure-slug [:variable] measure-slug)
-        (derive-column :obs-slug [:date-slug :time-slug :sensor-no :measure-slug] slug-combine)
-        (derive-column :obs-uri [:obs-slug] base-data)
-        (derive-column :dt-slug [:date-slug :time-slug] slug-combine)
-        (derive-column :ds [:dt-slug] base-data)
-        (derive-column :unit [:variable] measure-unit)
-        (derive-column :below-lod [:value] belowLOD?)
-        (derive-column :label [:variable] measure-label)
-        (derive-column :param-uri [:label] (comp parameter-def remove-blanks)))))
+  (-> (read-dataset data-file)
+      (take-rows 2)
+      ;; There seems to be a last blank column ~> problem 'move-first-row-to-header
+      (columns (range 31))
+
+      (make-dataset move-first-row-to-header)
+      (rename-columns (comp keyword slugify))
+      (add-filename-to-column :sensor-no)
+      (mapc {:sensor-no parse-sensor})
+      (columns [:date :time :no-final :no2-final :co-final :o3-final :8-temp-celcius :9-rh-% :10-ap-mbar :sensor-no])
+      (derive-column :sensor-uri [:sensor-no] sensor-id)
+      (melt [:date :time :sensor-uri :sensor-no])
+      (derive-column :datetime [:date :time] ->datetime)
+      (derive-column :date-slug [:date] organize-date)
+      (derive-column :time-slug [:time] time-slug)
+      (derive-column :measure-slug [:variable] measure-slug)
+      (derive-column :obs-slug [:date-slug :time-slug :sensor-no :measure-slug] slug-combine)
+      (derive-column :obs-uri [:obs-slug] base-data)
+      (derive-column :dt-slug [:date-slug :time-slug] slug-combine)
+      (derive-column :ds [:dt-slug] base-data)
+      (derive-column :unit [:variable] measure-unit)
+      (derive-column :below-lod [:value] belowLOD?)
+      (derive-column :label [:variable] measure-label)
+      (derive-column :param-uri [:label] (comp parameter-def remove-blanks))))
 
 (defpipe convert-aqmesh-sensor
   "Pipeline to convert tabular AQMesh sensor data"
   [data-file]
-  (let [ss (parse-sensor data-file)]
-    (-> (read-dataset data-file)
-        (make-dataset [:longtitude :latitude])
-        (drop-rows 1)
-        (take-rows 1)
-        (add-column :sensor-no ss)
-        (derive-column :sensor-uri [:sensor-no] sensor-id))))
+  (-> (read-dataset data-file :format :csv)
+      (make-dataset [:longtitude :latitude])
+      (drop-rows 1)
+      (take-rows 1)
+      (add-filename-to-column :sensor-no)
+      (mapc {:sensor-no parse-sensor})
+      (derive-column :sensor-uri [:sensor-no] sensor-id)))
 
 (defpipe convert-sensor-parameter-concept-scheme
   "Pipeline to convert tabular AQMesh sensor measure concept scheme"
   [data-file]
-  (-> (read-dataset data-file)
+  (-> (read-dataset data-file :format :csv)
       (make-dataset move-first-row-to-header)
       (take-rows 1)
       (rename-columns (comp keyword slugify))
