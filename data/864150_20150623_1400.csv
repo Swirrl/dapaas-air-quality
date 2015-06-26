@@ -1,0 +1,2 @@
+Date,Time,Longtitude,Latitude,1-NO Prescale - ppb,NO Slope,NO Offset,NO Final,NO Status,2-NO2 Prescale - ppb,NO2 Slope,NO2 Offset,NO2 Final,NO2 Status,4-CO Prescale - ppb,CO Slope,CO Offset,CO Final,CO Status,6-O3 Prescale - ppb,O3 Slope,O3 Offset,O3 Final,O3 Status,8-Temp-Celcius,9-RH-%,10-AP-mBar,210-Noise Level-Celcius,211-Noise Peak-%,200-Total Count-Celcius,Flag,
+23/06/2015,14:00,10.724437,59.932178,-14.268,1.000,0.000,-14.268,Below LOD,-53.473,1.000,0.000,-53.473,Below LOD,133.269,1.000,0.000,133.269,,47.181,1.000,0.000,47.181,,22.000,48.400,996.000,195.000,299.000,,S
